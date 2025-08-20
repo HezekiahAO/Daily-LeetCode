@@ -1,5 +1,5 @@
 # this is a simple python project aimed to impplement my practical knowledge in Backend
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import datetime as date_time
 
@@ -18,6 +18,21 @@ content = db.Column(db.String(200), nullable=False) # We dont want the user to c
 date_time = db.column(db.DateTime) # This will automatically set the date and time when the task is created.
 def __repr__(self):
         return f'<Task {self.id}>' # This will return the id of the task when printed
+
+
+@app.route("/join", methods=["GET", "POST"])
+def join():
+    if request.method == "POST":
+        # Here you would handle the form submission, e.g., save to database
+        name = request.form.get("name")
+        email = request.form.get("email")
+        # You can add logic to save the name and email to the database or perform other actions
+    return "Thank you for joining!"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
 
 @app.route("/")
 def home():
