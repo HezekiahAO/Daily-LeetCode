@@ -8,9 +8,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'# database URI   ////
 
 #Data Base
 db = SQLAlchemy(app) # SQLAlchemy is an ORM (Object Relational Mapper) that allows us to interact with the database using Python objects instead of SQL queries.
+# At this point above, we initialize the database with the Flask app.
+
+
 
 class Todo:(db.Model)
-id = db.Column(db.Integer, primary_key=True)
+id = db.Column(db.Integer, primary_key=True)  # Id is the primary key of the table, which means it will be unique for each task. Think f it as features of the website.
 content = db.Column(db.String(200), nullable=False) # We dont want the user to create a todo task and leaveit empty.
 date_time = db.column(db.DateTime) # This will automatically set the date and time when the task is created.
 def __repr__(self):
