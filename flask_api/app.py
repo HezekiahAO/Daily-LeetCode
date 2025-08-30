@@ -16,7 +16,6 @@ class UserModel(db.Model):   #Creates a database model for users
 def __repr__(self):    # A representational File
     return f'User(name ={self.name}, email = {self.name})'   # A uniue represntation of a user
 
-s
 user_args = reqparse.RequestParser()
 user_args.add_argument('name', type = str, required = True, help = 'Name cannot be left Blank chief')
 user_args.add_argument('email', type = str, required = True, help = 'Email cannot be left Blank chief')
