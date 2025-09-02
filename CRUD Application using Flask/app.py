@@ -48,19 +48,19 @@ def delete_user(user_id):
     conn.commit()
     conn.close()
 
-@app.route('/')
+@app.route('/')              #routing this home page to index function
 def index():
     users = get_users()
     return render_template('frontend.html', users=users)  # Render the template with user data
 
-@app.route('/add', methods=['POST'])
+@app.route('/add_user', methods=['POST'])   # routing this add_user page to add function
 def add():
     name = request.form['name']    #request object is used to handle form data and form allows us to get the data from the form.
     age = request.form['age']
     add_user(name, age)
     return redirect(url_for('index'))
 
-@app.route('/update/<int:user_id>', methods=['POST', 'GET'])
+@app.route('/update', methods=['POST', 'GET'])
 def update(user_id):
     if request.method == 'POST':
         name = request.form['name']
