@@ -110,14 +110,16 @@
             <button type="submit">Add User</button>
         </form>
 
+
         <h2>Users List</h2>
         <ul class="user-list">
             {% for user in users %}
                 <li>
                     <span>{{ user[1] }} (Age: {{ user[2] }})</span>
                     <div>
-                        <a href="{{ url_for('update_user_route', id=user[0]) }}">Edit</a>
-                        <a href="{{ url_for('delete_user_route', id=user[0]) }}" class="delete-link">Delete</a>
+                        <a href="{{ url_for('update', user_id = user[0]) }}">Edit</a>
+
+                        <a href="{{ url_for('delete', user_id = user[0]) }}" class="delete-link">Delete</a>
                     </div>
                 </li>
             {% endfor %}
