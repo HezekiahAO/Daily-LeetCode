@@ -1,22 +1,31 @@
 from flask import Flask                                                                                                      # IMPORT STAGE
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api, reqparse, fields, marshal_with, abort 
+from sqlalchemy.exc import IntegrityError
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # mapps your relative path to the database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # maps your relative path to the database
 db = SQLAlchemy(app)                                               # SET UP STAGE
 api = Api(app)   # Thats our Api getting setup
+
+with app.app_context():
+    db.create_all()
 
 
 with app.app_context():  #This creates the database
     db.create_all()
 
-class UserModel(db.Model):   #Creates a database model for users
+
+class UserModel(db.Model):   # Creates a database model for users
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)                                                           # SET UP CONTENTS AND CONDITIONS
-                                                                                                                                
+
+    def __init__(self, email, name):
+        self.name = name
+        self.email = email
+
     def __repr__(self):    # A representational File
         return f'User(name ={self.name}, email = {self.email})'   # A uniue represntation of a user   
 
@@ -46,12 +55,22 @@ class Users(Resource):   # This is a resource for a single user
 
     @marshal_with(user_fields)
     def post(self):
-        args = user_args.parse_args()
+        args = user_args.parse_args()   
         user = UserModel(name=args['name'], email=args['email'])
         db.session.add(user)
         db.session.commit()
         return user, 201
         
+
+class User(Resource):
+        @marshal_with(user_fields)
+        def get(self, id):
+            user = UserModel.query.filter_by(id=id).first()
+            if not user: 
+                abort(404, help = 'User not Found')
+                return user
+
+
 
 api.add_resource(Users, '/api/users')   # This adds the resource to the api
                     
@@ -61,5 +80,3 @@ def home():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
