@@ -9,9 +9,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # maps your rel
 db = SQLAlchemy(app)                                               # SET UP STAGE
 api = Api(app)   # Thats our Api getting setup
 
-with app.app_context():
-    db.create_all()
-
 
 with app.app_context():  #This creates the database
     db.create_all()
