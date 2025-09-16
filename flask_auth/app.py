@@ -3,22 +3,30 @@ from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
-from  wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt   # For hashing passwords
+import os
+from sqlalchemy import create_engine
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+
+relative_path = 'database.db'
+absolute_path = os.path.abspath(relative_path)
+print(f'Using database at: {absolute_path}')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydb.sqlite'                         
 app.config['SECRET_KEY'] = 'This is a secret key!'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
 
 
+
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
-
+login_manager.login_view = "login"       # type: ignore[attr-defined]                          # login view is an attribute that tells Flask Login which endpoint to redirect to when the user needs to log in.
 
 
 with app.app_context():
@@ -52,7 +60,6 @@ class RegisterForm(FlaskForm):
                 "That username already exists. Please choose a different one.")
         
         
-
 
 
 class LoginForm(FlaskForm):
