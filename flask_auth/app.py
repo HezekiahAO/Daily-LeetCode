@@ -29,8 +29,6 @@ login_manager.init_app(app)
 login_manager.login_view = "login"       # type: ignore[attr-defined]                          # login view is an attribute that tells Flask Login which endpoint to redirect to when the user needs to log in.
 
 
-with app.app_context():
-    db.create_all()
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -46,18 +44,20 @@ class User(db.Model, UserMixin):
 
 
 
+with app.app_context():
+    db.create_all()                                                                                                   # Create database tables if they don't exist yet after the User Model has been defined.
+
+
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
     password = PasswordField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Password"})
     submit = SubmitField("Register")
 
     def validate_username(self, username):
-        existing_user = User.query.filter_by(
-            username=username.data).first()
+        existing_user = User.query.filter_by(username=username.data).first()
 
         if existing_user:
-            raise ValidationError(
-                "That username already exists. Please choose a different one.")
+            raise ValidationError("That username already exists. Please choose a different one.")
         
         
 
@@ -86,14 +86,21 @@ def login():
                 return redirect(url_for('dashboard'))
     return render_template('login.html', form=form)
 
+
+
+
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
+
+
+
 
 @app.route('/logout')
 def logot():
     logout_user()
     return redirect(url_for('home'))
+
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -108,7 +115,9 @@ def register():
     return render_template('register.html', form=form)
 
 
-
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', port = 5000, debug=True)
