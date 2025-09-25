@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+<body>
+    <h1>Login Page of Authentication System using Flask</h1>
+
+    <form method="POST" action=''>
+        
+        {{form.hidden_tag()}}
+        {{form.username.label}} {{form.username(size=20)}} <br>
+        {{form.password.label}} {{form.password(size=20)}} <br>
+        {{form.submit()}}
+
+    <a href="{{url_for('login')}}">Don't Have an Account?</a><br>
+    <a href="{{url_for('register')}}">Register Here</a><br>
+</body>
+</html>
