@@ -21,13 +21,15 @@ def test_end_piont():
     assert response.status_code == 200
     pass    
 
-def test_ecan_create_task():
+def test_can_create_task():
     payload = {
         'content' : 'My first task',
         'user_id' : 'User Id',
         "status" : "incomplete"
     }
-    response = requests.put(ENDPOINT + '/create-task', json=payload)
-    assert response.status_code == 200
-    data = response.json()
-    print(data)
+    create_task_response = requests.put(ENDPOINT + '/create-task', json=payload)
+    assert create_task_response.status_code == 200
+    data_1 = create_task_response.json()
+    print(data_1)
+
+
