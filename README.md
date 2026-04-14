@@ -1,1 +1,1 @@
-A repository deicated to solved leetcode problems
+This is a repository deicated to solved leetcode problems.
